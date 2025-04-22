@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                      pointLabels: {
                         font: {
-                            size: 14
+                            size: 12
                         }
                         // color will be updated
                     }
