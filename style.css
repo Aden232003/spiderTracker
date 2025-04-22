@@ -1,0 +1,59 @@
+/* Keep any chart-specific or non-Tailwind overrides here if needed */
+
+/* Example: If you needed to force a style on the chart canvas that Tailwind couldn't easily do */
+/* #spiderChart { ... } */
+
+/* The following styles are likely now redundant due to Tailwind and can be removed */
+/*
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.chart-container {
+    position: relative;
+    width: 90vw; 
+    max-width: 600px; 
+    height: 70vh; 
+    max-height: 500px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#start-button { ... } 
+#start-button:hover { ... }
+
+#input-section { ... }
+#input-section h2 { ... }
+#metrics-form .form-group { ... }
+#metrics-form label { ... }
+#metrics-form input[type="text"],
+#metrics-form input[type="number"] { ... }
+#metrics-form input:focus { ... }
+.form-navigation { ... }
+.nav-button { ... }
+.nav-button-next, .nav-button-calculate { ... }
+.nav-button-next:hover, .nav-button-calculate:hover { ... }
+.nav-button[type="button"] { ... }
+.nav-button[type="button"]:hover { ... }
+
+*/ 

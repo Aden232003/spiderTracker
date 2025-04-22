@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!-- Add class="dark" here via JS for dark mode -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Tracker</title> <!-- Updated Title -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Add Favicon Link -->
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {}
+            }
+        }
+    </script>
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Custom styles for Chart.js specifically if needed */
+        .chart-container canvas {
+            max-height: 70vh; /* Ensure canvas respects container */
+        }
+        /* Hide scrollbars for number inputs (optional) */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        /* Basic transition for dark mode */
+        body, #welcome-section, #chart-section, #input-section, input {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+    </style>
+    <script>
+        // Minimal script to apply dark mode initially before full JS loads
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            localStorage.theme = 'dark';
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.theme = 'light';
+        }
+    </script>
+</head>
+<!-- Added dark mode background/text classes -->
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col items-center min-h-screen p-4 md:p-8">
+
+    <!-- Header for Title and Toggle -->
+    <header class="w-full max-w-3xl flex justify-between items-center mb-6 md:mb-10 px-2">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-200">Fitness Tracker</h1>
+        <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+            <!-- Moon Icon -->
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <!-- Sun Icon -->
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 003.636 6.464l.707.707a1 1 0 001.414-1.414l-.707-.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+    </header>
+
+    <!-- Welcome Section -->
+    <!-- Added dark mode background/text classes -->
+    <div id="welcome-section" class="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md max-w-lg w-full">
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">Welcome!</h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-6">Discover your strengths and areas for improvement across key fitness dimensions. Click below to start the assessment.</p>
+        <button id="get-started-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out">
+            Get Started
+        </button>
+    </div>
+
+    <!-- Chart Section -->
+    <!-- Added dark mode background/text classes -->
+    <div id="chart-section" class="w-full max-w-2xl mb-8 hidden">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 text-center">Your Fitness Profile</h2>
+        <!-- Chart container needs dark background specified -->
+        <div class="chart-container bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md relative">
+            <canvas id="spiderChart"></canvas>
+        </div>
+         <div class="text-center mt-6 space-x-4">
+            <button id="update-scores-button" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-lg transition duration-300 ease-in-out">
+                Update Scores
+            </button>
+            <!-- Download Button (Initially Hidden) -->
+            <button id="download-report-button" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-lg transition duration-300 ease-in-out hidden">
+                 Download Report
+            </button>
+        </div>
+    </div>
+
+    <!-- Input Section -->
+    <!-- Added dark mode background/text classes -->
+    <div id="input-section" class="w-full max-w-lg bg-white dark:bg-gray-800 p-6 md:p-8 rounded-lg shadow-md hidden">
+        <div id="step-indicator" class="mb-6 text-center text-gray-600 dark:text-gray-400 font-semibold"></div>
+        <h2 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 text-center"></h2>
+        <form id="metrics-form">
+            <!-- Form content generated by JS, needs dark mode input styles -->
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
